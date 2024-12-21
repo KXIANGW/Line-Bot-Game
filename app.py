@@ -172,6 +172,15 @@ def message_text(event):
             ))
         #modify2上面-----------
 
+        # Modify by Ke  ------------------------ 修改部分下列code ------------------------ 
+        # restart game message
+        if user.HP < 1 or user.level > 11:
+            TemplateMessage_obj = game_over()
+            if len(messages) >= 4:
+                messages = messages[1:]
+            messages.append(TemplateMessage_obj)
+        # Modify by Ke  ------------------------ 修改部分上列code ------------------------ 
+
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
                 reply_token=event.reply_token,
@@ -218,27 +227,19 @@ def process_command(command: str):
 # 文字事件的處理可以寫在這(各個關卡)
 def process_event(text: str):
     place = ["遊戲開始", "海豚1", "海豚2", "海豚3", "二一石拍照", "基哥1","基哥2","沒問題","地圖連接","上下樓","骰子","該你了"] #modify
-
-    if user.level >= len(place):
-        userDB.delete_user(user)
-        confirm_template = ConfirmTemplate(
-            text="是否再次接受此任務",
-            actions=[
-                MessageAction(label='是', text='遊戲開始'),
-                MessageAction(label='否', text='我這次決定回家睡睡')
-            ]
-        )
-        return ["謎底已經解開!"], [{"altText": "是否再次接受此任務", "template": confirm_template}]
     
     try:
         level_event = {0:level0, 1:level1, 2:level2, 3:level3, 4:level4, 5:level5, 6:level6, 7:level7, 8:level8, 9:level9, 10:level10 ,11:level11} #modify
         is_pass, textmessage, templatemessage, photo_urls ,video_urls= level_event[user.level](text) #modify
 
+        # Modify by Ke  ------------------------ 修改部分下列code ------------------------ 
         # 是否進入下一關卡
         if is_pass :
             print(f"Finished level{user.level}\n")
             user.level = user.level + 1
-            userDB.save(user)
+            if user.level < 12:
+                userDB.save(user)
+        # Modify by Ke  ------------------------ 修改部分上列code ------------------------ 
         
         return textmessage, templatemessage, photo_urls, video_urls #modify
     
@@ -304,24 +305,11 @@ def level3(text: str):
         return flag, sentences_list, [], ['https://i.imgur.com/KouT1gt.png'], []  # 海豚甩尾圖
 
 
+# Modify by Ke  ------------------------ 修改部分下列code ------------------------ 
 # 與二一石拍照比對功能 (手放在 慎思 創新 石頭的中間)  # 沒寫
 def level4(text: str):
-    # 基哥1 填空處1
-    buttons_template = ButtonsTemplate(
-        title='大數問題',
-        thumbnail_image_url='https://imgur.com/tdEr9W1.png', # 基哥so far圖
-        text='填空處1該填入甚麼?',
-        actions=[
-            MessageAction(label="sum += num1[i]-'0'", text="sum += num1[i] - '0'"),
-            MessageAction(label="sum += num1", text="sum += num1"),
-        ]
-    )
-
-    if text == "拍照":
-        return True, ["**關卡2->3 完成! 關卡3 開始!**", "池水清澈，微風輕拂。池邊石凳上坐著一位戴眼鏡的老年男子——基成先生，他手中拿著一台筆記型電腦，正在專注地敲著鍵盤。他抬起頭，看到玩家，露出了一絲狡黠的笑容。", \
-                      "想從我這裡拿到線索，可得證明你有寫程式的基本功!\n相信大數的問題對你們來說不是問題，嘿嘿"], [{"altText": "是否再次接受此任務", "template": buttons_template}], ['https://imgur.com/LVfRaXN.png'], [] # 程式題目圖
-    else:
-        return False, ["再試一次"], [], [], []
+        return False, ["請將手放置在二一石上拍照已啟動傳送門"], [], [], []
+# Modify by Ke  ------------------------ 修改部分上列code ------------------------ 
     
 # 基哥
 def level5(text: str):  
@@ -485,17 +473,32 @@ def level11(text:str):
         return False, ["請輸入 '換你了' 讓對方擲骰子"], [], [], []
 
     
+# Modify by Ke  ------------------------ 修改部分下列code ------------------------ 
+def game_over():
+    userDB.delete_user(user)
+    confirm_template = ConfirmTemplate(
+        text="是否再次接受此任務",
+        actions=[
+            MessageAction(label='是', text='遊戲開始'),
+            MessageAction(label='否', text='我這次決定回家睡睡')
+        ]
+    )
+    return TemplateMessage(
+                alt_text="是否再次接受此任務", 
+                template=confirm_template)
+                
+
 # 圖片事件的處理
 @handler.add(MessageEvent, message=ImageMessageContent)
 def message_image(event):
     image_file_path = ""
+    message_content = None
     with ApiClient(configuration) as api_client:
         line_bot_blob_api = MessagingApiBlob(api_client)
         message_content = line_bot_blob_api.get_message_content(
             message_id=event.message.id
         )
-        # 每張圖片都要存下來嗎?
-        image_file_path = userDB.save_image(user, message_content)
+
 
     '''
     textmessage: 放要回傳的文字內容(e.g.['Hi', 'Hello'])
@@ -506,16 +509,20 @@ def message_image(event):
     '''
     textmessage = []
     templatemessage = []
+    photo_urls = []
+    video_urls = []
 
     try:
-        level_event = {1:level1_image, 2:level2_image}
+        level_event = {4:level4_image}
         if user.level in level_event:
+            # 僅存符合條件的圖片
+            image_file_path = userDB.save_image(user, message_content)
             # 比較相似度
             image_GT = PIL.Image.open(f"./GT/{user.level}.jpg")
             image_input = PIL.Image.open(image_file_path)
             similarity = image_compare(image_GT, image_input)
 
-            is_pass, textmessage, templatemessage = level_event[user.level](similarity=similarity)
+            is_pass, textmessage, templatemessage, photo_urls, video_urls = level_event[user.level](similarity=similarity)
             # 是否進入下一關卡
             if is_pass :
                 print(f"Finished level{user.level}\n")
@@ -543,6 +550,17 @@ def message_image(event):
                 alt_text=tm["altText"], 
                 template=tm["template"])
                 )
+        for photo_url in photo_urls:
+            messages.append(ImageMessage(
+                            original_content_url= photo_url,
+                            preview_image_url= photo_url
+                        ))
+
+        for video_url,preview_image_url in video_urls: 
+            messages.append(VideoMessage(
+                original_content_url=video_url,
+                preview_image_url=preview_image_url  
+            ))
 
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
@@ -550,21 +568,27 @@ def message_image(event):
                 messages=messages
             )
         )
+# 與二一石拍照比對功能 (手放在 慎思 創新 石頭的中間)  # 沒寫
+def level4_image(similarity):
+    # 基哥1 填空處1
+    buttons_template = ButtonsTemplate(
+        title='大數問題',
+        thumbnail_image_url='https://imgur.com/tdEr9W1.png', # 基哥so far圖
+        text='填空處1該填入甚麼?',
+        actions=[
+            MessageAction(label="sum += num1[i]-'0'", text="sum += num1[i] - '0'"),
+            MessageAction(label="sum += num1", text="sum += num1"),
+        ]
+    )
 
-#  "二一石"
-def level1_image(similarity):
     if similarity >= 0.7:
-        return True, ["關卡1 完成!", "關卡2 開始!\n通關密語：YZU牌子"], []
+        return True, ["**關卡2->3 完成! 關卡3 開始!**", "池水清澈，微風輕拂。池邊石凳上坐著一位戴眼鏡的老年男子——基成先生，他手中拿著一台筆記型電腦，正在專注地敲著鍵盤。他抬起頭，看到玩家，露出了一絲狡黠的笑容。", \
+                      "想從我這裡拿到線索，可得證明你有寫程式的基本功!\n相信大數的問題對你們來說不是問題，嘿嘿"], [{"altText": "是否再次接受此任務", "template": buttons_template}], ['https://imgur.com/LVfRaXN.png'], [] # 程式題目圖
     else:
-        return False, [f"相似度: {similarity*100}%", "請再試一次"], []
-# "YZU牌子"
-def level2_image(similarity):
-    if similarity >= 0.7:
-        return True, ["關卡2 完成!", "關卡3 開始!\n通關密語：蓮花們"], []
-    else:
-        return False, [f"相似度: {similarity*100}%", "請再試一次"], []
+        return False, [f"相似度: {similarity*100}%", "再試一次"], [], [], []
 
-   
+
+# Modify by Ke  ------------------------ 修改部分上列code ------------------------ 
 
 
 
