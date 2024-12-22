@@ -36,7 +36,9 @@ from linebot.v3.messaging import (
     ReplyMessageRequest,
     TextMessage,
     ImageMessage,   #modify
-    VideoMessage    #modify2
+    VideoMessage,    #modify2
+    CarouselTemplate, #modify by Ke
+    CarouselColumn, #modify by Ke
 )
 
 # For Line-bot template
@@ -173,11 +175,20 @@ def message_text(event):
         #modify2上面-----------
 
         # Modify by Ke  ------------------------ 修改部分下列code ------------------------ 
+        # game over message
+        if user.HP < 1:
+            TemplateMessage_obj = restart_game()
+            if len(messages) >= 4:
+                #messages = messages[1:]
+                messages = []
+            messages.append(TextMessage(text="Game Over!"))
+            messages.append(TemplateMessage_obj)
         # restart game message
-        if user.HP < 1 or user.level > 11:
-            TemplateMessage_obj = game_over()
+        elif user.level > 11:
+            TemplateMessage_obj = restart_game()
             if len(messages) >= 4:
                 messages = messages[1:]
+            messages.append(TextMessage(text="Congratulations on completing the game!"))
             messages.append(TemplateMessage_obj)
         # Modify by Ke  ------------------------ 修改部分上列code ------------------------ 
 
@@ -187,13 +198,34 @@ def message_text(event):
                 messages=messages
             )
         )
-            
+# Modify by Ke  ------------------------ 修改部分下列code ------------------------           
 # 命令指令集
 def process_command(command: str):
     target_languages = {"0": "en", "1": "zh-Hant", "2": "zh-Hans", "3": "ja", "4": "ko"}
     languages = ["English", "Tradional Chinese", "Simplified Chinese", "Japanese", "Korean"]
     if command == "help":
-        return ["TBD"], []
+        carousel_template = CarouselTemplate(
+            # actions的數量要一致
+                columns=[
+                    CarouselColumn(
+                        title='Feature',
+                        text='1',
+                        actions=[
+                            MessageAction(label='Get Map', text='~map'),
+                            MessageAction(label='Get HP', text='~hp'),
+                        ]
+                    ),
+                    CarouselColumn(
+                        title='Feature',
+                        text='2',
+                        actions=[
+                            MessageAction(label='Get Hint', text='~hint'),
+                            MessageAction(label='Set Language', text='~lang')
+                        ]
+                    ),
+                ]
+            )
+        return ["You can use the following features  to operate!"], [{"altText": "獲得功能指令", "template": carousel_template}]
     
     elif command == "hint":
         return [HINT[user.level]], []
@@ -221,8 +253,15 @@ def process_command(command: str):
         user.lang = target_languages[command]
         userDB.save(user)
         return [f"Set Language: {languages[int(command)]} successfully!"], []
+    
+    elif command == "map":
+        level_map = {0: 0, 1: 1, 2: 1, 3: 1, 4: 2, 5: 3, 6: 3, 7: 3.5, 8: 4, 9: 4, 10: 5, 11: 5}
+        return [f"Current level: {level_map[user.level]}"], []
+    elif command == "hp":
+        return [f"Current hp: {user.HP}"], []
     else:
         return ['Error Command! \nPlease use "~help" to query command instrunctions!'], []  
+# Modify by Ke  ------------------------ 修改部分上列code ------------------------ 
 
 # 文字事件的處理可以寫在這(各個關卡)
 def process_event(text: str):
@@ -474,7 +513,7 @@ def level11(text:str):
 
     
 # Modify by Ke  ------------------------ 修改部分下列code ------------------------ 
-def game_over():
+def restart_game():
     userDB.delete_user(user)
     confirm_template = ConfirmTemplate(
         text="是否再次接受此任務",
