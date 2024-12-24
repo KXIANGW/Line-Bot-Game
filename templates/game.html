@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聊天室</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- 左側聯絡人列表 -->
+        <div class="contacts-panel">
+            <div class="contacts-header">
+                <h2>聯絡人列表</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="搜尋聯絡人...">
+                </div>
+            </div>
+            <div class="contacts-list" id="contactsList"></div>
+        </div>
+
+        <!-- 右側聊天區域 -->
+        <div class="chat-panel">
+            <div class="chat-header" id="chatHeader"></div>                 
+                <div class="messages-container" id="messagesContainer">
+            </div>
+            <div class="input-area">
+                <textarea id="messageInput" placeholder="輸入訊息..."></textarea>
+                <button id="Button1" style="display: none;">Yes</button>
+                <button id="Button2" style="display: none;">No</button>
+                <button id="sendButton">發送</button>
+                <!-- <input type="file" id="imageInput" accept="image/*" style="display:none;"> -->
+                <!-- <button id="imageUploadButton">上傳圖片</button> -->
+            </div>
+        </div>
+    </div>
+    <button id="restart">restart</button>
+    <div id="hpContainer"></div>
+    <!-- add start -->
+    <div id="imageModal" class="modal" onclick="hideImageModal()">
+        <span class="close">&times;</span>
+        <img id="modalImage" class="modal-content">
+    </div>
+    <!-- add end -->
+    <script src="{{url_for('static', filename='js/main.js')}}"></script>
+</body>
+</html>

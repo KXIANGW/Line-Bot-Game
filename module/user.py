@@ -3,18 +3,22 @@ from datetime import datetime
 import os, shutil
 
 class User:
-    def __init__(self, userID: str = "", lang: str = "zh-Hant", level: int = 0, HP: int=3, timestamp: str = ""):
+    def __init__(self, userID: str = "", lang: str = "zh-Hant", level: int = 0, HP: int=3, card=False, state=False, timestamp: str = ""):
         """
         userID: 使用者 ID
         lang: 語言
         level: 目前到達哪一關卡
         HP: 血條(預設3)
+        card: 命運卡
+        state: 紀錄是否有使用命運卡
         timestamp: 儲存更新時間
         """
         self.userID = userID
         self.lang = lang
         self.level = level
         self.HP = HP
+        self.card = card
+        self.state = state
         self.timestamp = timestamp
     
     def __str__(self):
@@ -28,6 +32,8 @@ class User:
             "lang": self.lang,
             "level": self.level,
             "HP": self.HP,
+            "card": self.card,
+            "state": self.state,
             "timestamp": self.timestamp
         }
 

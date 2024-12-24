@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-TW"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我要開後門!!!</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            color: #333;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        body2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, #3399ff, #f6f49d);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 5px solid #0073e6;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+        }
+
+            nav ul li {
+                margin: 0 25px;
+            }
+
+                nav ul li a {
+                    text-decoration: none;
+                    color: white;
+                    font-size: 20px;
+                    font-weight: bold;
+                    transition: color 0.3s, transform 0.3s;
+                }
+
+                    nav ul li a:hover {
+                        color: #cceeff;
+                        transform: scale(1.2);
+                    }
+
+        main {
+            max-width: 950px;
+            min-height: 350px;
+            margin: 120px auto;
+            padding: 20px;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.8)), url('/static/封面.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 30px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        main h1 {
+            color: #3399ff;
+            font-size: 4em;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        main p {
+            line-height: 1.8;
+            font-weight: bold;
+            color: #333;
+            font-size: 1.4em;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #3399ff;
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+            .btn:hover {
+                transform: scale(1.1);
+                background-color: #0073e6; /* 按鈕變深色 */
+            }
+
+        section {
+            max-width: 950px;
+            margin: 10px auto;
+            padding: 40px;
+        }
+
+            section h2 {
+                color: #0073e6;
+                font-size: 2.5em;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 0px;
+                text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            }
+
+            section h3 {
+                color: black;
+                font-size: 1.4em;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 0px;
+                animation: pulse 2.5s infinite;
+            }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        section p {
+            color: black;
+            font-size: 1.4em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 0px;
+            animation: float 2.5s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+
+        #game-features, #story, #join, #QA {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 35px;
+            border-radius: 10px;
+        }
+
+        #game-features, #story, #join, #QA {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('/static/遊戲.png');
+        }
+
+        #story {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('/static/看書.png');
+        }
+
+        #join {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.6)), url('/static/加入好友.png');
+        }
+
+        #QA {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('/static/Q&A.png');
+        }
+
+        #team {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('/static/團隊.png');
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 0px;
+            background-color: #0073e6;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            width: 200px;
+            height: 300px;
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            border: 2px solid black;
+            overflow: hidden;
+        }
+
+        .card-front {
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-back {
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: rotateY(180deg);
+            text-align: center;
+            padding: 10px;
+        }
+
+            .card-back p {
+                font-size: 1.4em;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 0px;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#game-features">遊戲特色</a></li>
+                <li><a href="#story">故事背景</a></li>
+                <li><a href="#character-introduction">角色介紹</a></li>
+                <li><a href="game">開始試玩</a></li>
+                <li><a href="#QA">Q&A</a></li>
+                <li><a href="#join">加入好友</a></li>
+                <li><a href="#team">製作團隊</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>我要開後門!!!</h1>
+        <p>這是一個結合校園探索、謎題解鎖、幽默互動的冒險遊戲，挑戰你的邏輯推理和運氣，看看你是否能成功找到後門的鑰匙！</p>
+        <a href="game" class="btn">開始遊戲</a>
+    </main>
+
+    <section id="game-features">
+        <h2>遊戲特色</h2>
+        <p>豐富的劇情選擇：每個決策都可能改變故事走向！</p>
+        <p>互動式對話系統：你的對話選擇會影響遊戲結局！</p>
+        <p>程式設計挑戰：解鎖謎題，發揮程式設計技巧！</p>
+        <p>神秘的角色：每位角色背後都有隱藏的秘密等你發掘！</p>
+        <p>多樣化的決鬥方式：骰子、撲克牌，智慧與運氣兼具！</p>
+        <p>地圖探索與提示系統：幫助你在關卡中找到方向！</p>
+    </section>
+
+    <section id="story">
+        <h2>故事背景</h2>
+        <p>某天，一則宿舍廣播打破了平日的寧靜。廣播中提到了一把可以打開後門的鑰匙，一個精力旺盛、腦迴路獨特的女孩決心要找出這把鑰匙的下落，並拖著毫無準備的你（玩家）一起展開這場尋找鑰匙的冒險。雖然你對主角的行為感到困惑，但無法抗拒她的熱情以及強悍，於是只能跟著踏上旅途。</p>
+        <p>在這場冒險中，你們將面對極品王店員、神秘老人及抓交替的海豚等提出的挑戰。不僅如此，途中還會有黑影出現，時刻牽動著你們的神經。而這一切都指向了那把鑰匙的真正所在地。</p>
+        <p>你們的生命值有限，謎題與挑戰層出不窮。是靠智慧與勇氣突破重重難關，還是半途而廢，陷入無盡的迴圈？一切取決於你的選擇。踏上這場冒險，揭開屬於學校的隱秘篇章吧！</p>
+    </section>
+
+    <section id="character-introduction">
+        <h2>角色介紹</h2>
+    </section>
+    <body2>
+        <div class="gallery">
+            <div class="card">
+                <div class="card-inner">
+                    <div class="card-front" style="background-image: url('/static/主角.png');"></div>
+                    <div class="card-back" style="background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('/static/校徽.png');">
+                        <p>主角：和玩家一起找鑰匙的女性，腦迴路奇特，力氣大。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-inner">
+                    <div class="card-front" style="background-image: url('/static/玩家.png');"></div>
+                    <div class="card-back" style="background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('/static/校徽.png');">
+                        <p>玩家：被抓去找鑰匙的人，生命值有 3 條。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-inner">
+                    <div class="card-front" style="background-image: url('/static/店員.png');"></div>
+                    <div class="card-back" style="background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('/static/校徽.png');">
+                        <p>極品王店員：極品王的員工，講述海豚傳說。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-inner">
+                    <div class="card-front" style="background-image: url('/static/基哥.png');"></div>
+                    <div class="card-back" style="background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('/static/校徽.png');">
+                        <p>基哥（基成先生）：擅長寫程式，測試玩家程式能力。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-inner">
+                    <div class="card-front" style="background-image: url('/static/海豚.png');"></div>
+                    <div class="card-back" style="background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('/static/校徽.png');">
+                        <p>海豚：抓交替的傳說生物，玩家需要和它對話來獲得下一步線索。</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-inner">
+                    <div class="card-front" style="background-image: url('/static/神秘老人.png');"></div>
+                    <div class="card-back" style="background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('/static/校徽.png');">
+                        <p>神秘老人：網球場支線劇情中的角色。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body2>
+    <section id="QA">
+        <h2>Q&amp;A</h2>
+        <p>
+            <strong>Q1: 這是一款什麼樣的遊戲？</strong><br>
+            這是一款充滿奇幻與解謎元素的冒險遊戲，玩家需要與主角合作，解開謎題並尋找鑰匙，最終打開後門。
+        </p>
+        <p>
+            <strong>Q2: 我能自定義玩家的語言嗎？</strong><br>
+            是的，遊戲開始時可以選擇語言設定，讓遊戲更加符合你的喜好。
+        </p>
+        <p>
+            <strong>Q3: 玩家有多少條命？</strong><br>
+            玩家初始有 3條生命值，錯誤選擇或失敗挑戰會扣除生命值，生命值歸零則遊戲結束。
+        </p>
+        <p>
+            <strong>Q4: 如何查看地圖和標記？</strong><br>
+            遊戲界面提供地圖功能，可以查看當前可走的路徑和已經走過的地點，幫助你更有效率地探索。
+        </p>
+        <p>
+            <strong>Q5: 可以獲得提示嗎？</strong><br>
+            是的，透過 Linbot按鈕，玩家可以獲得提示或選擇跳過一些劇情。
+        </p>
+        <p>
+            <strong>Q6: 劇情選項錯誤會發生什麼？</strong><br>
+            選錯選項可能會扣除生命值，但某些劇情會給予玩家額外提示，重新選擇。
+        </p>
+        <p>
+            <strong>Q7: 如何與海豚互動？</strong><br>
+            玩家可以自由輸入內容與海豚對話，並透過 Azure情感判定 三次達成正向結果，海豚才會提供機關位置。若情感判定三次負向，會被海豚攻擊並扣生命值。
+        </p>
+        <p>
+            <strong>Q8: 與基成先生的程式測驗如何進行？</strong><br>
+            基成先生提供程式碼問題，玩家需判斷正誤。每答錯一次，扣除一條生命值；答對全部問題後，可解鎖下一關的重要線索。
+        </p>
+    </section>
+
+    <section id="join" style="text-align: center;">
+        <h2>加入好友</h2>
+        <img width="250" height="250" src="/static/QRcode.png">
+        <h3>掃描 QR code 加入Line好友開始試玩吧!</h3>
+    </section>
+    <section id="team" style="text-align: center;">
+        <h2>製作團隊</h2>
+        <p>柯翔崴</p>
+        <p>黃宇薇</p>
+        <p>徐藝瑄</p>
+        <p>宋佳穎</p>
+        <p>葉珍珍</p>
+        <p>詹媁帆</p>
+        <h2></h2>
+    </section>
+    <footer>
+        <p>© 2024 我要開後門遊戲版權所有</p>
+    </footer>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            height: 2000px;
+        }
+
+        .image-container {
+            position: fixed;
+            bottom: 50px;
+            z-index: 1000;
+        }
+
+        .image {
+            width: 180px;
+            height: 180px;
+        }
+
+        #image1 {
+            animation: blink 1s infinite;
+        }
+
+        #image2 {
+            animation: moveUpDown 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes moveUpDown {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+    </style>
+
+    <div class="image-container" style="right: 0;">
+        <img id="image1" class="image" src="/static/image2.png" alt="Blinking Image">
+    </div>
+
+    <div class="image-container" style="left: 0;">
+        <img id="image2" class="image" src="/static/image3.png" alt="Moving Image">
+    </div>
+
+    <script>
+        const image1 = document.getElementById('image1');
+
+        image1.addEventListener('animationiteration', () => {
+            image1.src = image1.src.includes('/static/image1.png') ? '/static/image2.png' : '/static/image1.png';
+        });
+    </script>
+</body></html>
