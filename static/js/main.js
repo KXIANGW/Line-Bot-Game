@@ -285,6 +285,7 @@ function addImage(is_pass, level){
     if(level===9)
     {
         addMessage('bot', "追去樓梯口，現在有兩種選擇，請問你要上樓還下樓呢?", botTimestamp);
+        addMessage('image', "../static/上下樓圖.jpg", botTimestamp);
     }
 }
 

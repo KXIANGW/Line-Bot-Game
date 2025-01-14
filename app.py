@@ -195,7 +195,11 @@ def message_text(event):
             audio_files.clear()
             audio_durations.clear()
         # modify by Huang 上面 (LEVEL4 老婆婆語音訊息)---------------------------------------------------------
-
+        if event.message.text == "我覺得是海豚" and user.level == 13 and this_level_add_action == 12:
+            messages.insert(1, ImageMessage(
+                            original_content_url= 'https://i.imgur.com/GsY5jiP.jpeg',
+                            preview_image_url= 'https://i.imgur.com/GsY5jiP.jpeg'
+                        ))
         for tm in templatemessage:
             messages.append(TemplateMessage(
                 alt_text=tm["altText"], 
@@ -416,7 +420,7 @@ def level1(text: str, user):
         )
         return True, ["主角：", "極品王店員："], [{"altText": "是否再次接受此任務", "template": buttons_template}], [], [], file_name_list, duration_list
     else:
-        return False, ["**聽清楚題目，請再試一次**"], [], [], [], [], []
+        return False, ["**看清楚題目，請再試一次**"], [], [], [], [], []
 
 def level2(text: str, user):  
     # 傳說發生地點
@@ -424,7 +428,7 @@ def level2(text: str, user):
         text="以上傳說是發生在甚麼地點？",
             actions=[
                 MessageAction(label='二一石', text="發生在二一石"),
-                MessageAction(label='佛雕禪詩', text="發生在佛雕禪詩"),
+                MessageAction(label='牡丹亭', text="發生在佛雕禪詩"),
                 MessageAction(label='有庠紀念花園', text="發生在有庠紀念花園")
             ]
     )

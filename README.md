@@ -1,7 +1,13 @@
+## Project Name
+**我要開後門!!!**
+
+## Requirements
 Python Version
 > Python 3.11.10
 
-載入需要的套件
-> pip install -r requirements.txt
+Load the required packages
+```
+pip install -r requirements.txt
+```
 
-<font color="red">conifg.int 需要自行輸入 API Key</font>
+<font color="red">conifg.int requires manually entering the API Key.</font>
