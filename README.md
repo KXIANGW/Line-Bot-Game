@@ -10,4 +10,4 @@ Load the required packages
 pip install -r requirements.txt
 ```
 
-<font color="red">conifg.int requires manually entering the API Key.</font>
+<font color="red">`conifg.int` requires manually entering the API Key.</font>
